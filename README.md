@@ -26,7 +26,7 @@ Contributions, feedback, and suggestions are always welcome. Here’s how you ca
 
 I’m always open to conversations, whether it's about potential collaborations, questions, or just to exchange ideas. You can reach me at:
 
-- Email: [j@osmond.cc]
+- Email: j@osmond.cc
 - LinkedIn: [Jon Osmond](https://www.linkedin.com/in/josmond/)
 
 Thank you for visiting my website's repository. Your interest and any input you have is greatly appreciated. Feel free to explore the code, and don’t hesitate to reach out.
