@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eBird API Example</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .observation { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <h1>Recent Bird Observations</h1>
+    <div id="observations"></div>
+
+    <script>
+        // Replace 'YOUR_API_KEY' with your actual eBird API key
+        var apiKey = 'YOUR_API_KEY';
+        var regionCode = 'US-NY'; // Example region code, New York state
+        var url = 'https://api.ebird.org/v2/data/obs/' + regionCode + '/recent';
+
+        $.ajax({
+            url: url,
+            method: 'GET',
+            headers: {
+                "X-eBirdApiToken": apiKey
+            },
+            success: function(data) {
+                if (data.length > 0) {
+                    data.forEach(function(observation) {
+                        var elem = $('<div class="observation"></div>');
+                        elem.append('<h2>' + observation.comName + '</h2>');
+                        elem.append('<p>Location: ' + observation.locName + '</p>');
+                        elem.append('<p>Date: ' + observation.obsDt + '</p>');
+                        $('#observations').append(elem);
+                    });
+                } else {
+                    $('#observations').append('<p>No recent observations found.</p>');
+                }
+            },
+            error: function() {
+                $('#observations').append('<p>Error fetching observations.</p>');
+            }
+        });
+    </script>
+</body>
+</html>
