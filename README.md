@@ -30,4 +30,3 @@ Whether you have a question, a proposal, or just want to connect, I'd love to he
 - LinkedIn: [Your LinkedIn](https://www.linkedin.com/in/josmond/)
 
 Thank you for visiting my website's repository. Feel free to explore the code, and don't hesitate to reach out if you have any questions or suggestions!
-
