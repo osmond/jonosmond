@@ -4,11 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Astronomy Picture of the Day</title>
+    <title>Astronomy Picture of the Day | Jon Osmond - Web Developer and Product Owner</title>
+    <meta name="description"
+        content="Explore the universe with the Astronomy Picture of the Day by Jon Osmond, a skilled web developer and product owner. Dive into daily cosmic wonders and the beauty of the universe curated on Jon's digital platform.">
+    <meta property="og:url" content="https://jonosmond.com/nasa">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Astronomy Picture of the Day | Jon Osmond">
+    <meta property="og:description"
+        content="Dive into the beauty of the universe with Jon Osmond's Astronomy Picture of the Day. Discover daily images and insights into the cosmos on Jon's digital platform.">
+    <meta property="og:image"
+        content="https://images-assets.nasa.gov/image/a-sky-view-of-earth-from-suomi-npp_16611703184_o/a-sky-view-of-earth-from-suomi-npp_16611703184_o~medium.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="jonosmond.com">
+    <meta property="twitter:url" content="https://jonosmond.com/nasa">
+    <meta name="twitter:title" content="Astronomy Picture of the Day | Jon Osmond">
+    <meta name="twitter:description"
+        content="Discover the universe with Jon Osmond's Astronomy Picture of the Day. Explore daily cosmic wonders through Jon's expert web development and digital curation.">
+    <meta name="twitter:image"
+        content="https://images-assets.nasa.gov/image/a-sky-view-of-earth-from-suomi-npp_16611703184_o/a-sky-view-of-earth-from-suomi-npp_16611703184_o~medium.jpg">
+
+
     <link rel="stylesheet" href="/styles.css">
     <style>
         body {
-
             margin: 0;
             padding: 0;
             background-color: #0d1117;
@@ -19,6 +37,39 @@
             justify-content: center;
             min-height: 100vh;
 
+        }
+
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0d1117;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            /* Ensure it's above other content */
+        }
+
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #3498db;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         h1 {
@@ -53,10 +104,41 @@
         .footer-container {
             width: 100%;
         }
+
+        #backToTopBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 99;
+            font-size: 18px;
+            border: none;
+            outline: none;
+            background-color: #58a6ff;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 50px;
+            opacity: 0.7;
+            display: none;
+            /* Hidden by default */
+            transition: opacity 0.4s, background-color 0.3s;
+            /* Smooth transition */
+        }
+
+        #backToTopBtn:hover {
+            opacity: 1;
+            /* Fully visible on hover */
+            background-color: #007bff;
+            /* Darker shade on hover */
+        }
     </style>
 </head>
 
 <body>
+    <div id="preloader">
+        <div class="loader"></div> <!-- Customize this with your preloader design -->
+    </div>
+
     <header>
         <!-- SVG Menu Toggle with ARIA Label for Accessibility -->
         <svg viewBox="0 0 800 600" id="menuToggle" aria-label="Menu toggle">
@@ -81,6 +163,7 @@
     <h1 class="animated-text">NASA's Astronomy Picture of the Day</h1>
     <img id="apodImage" src="" alt="Astronomy Picture of the Day">
     <p id="apodExplanation"></p>
+    <button id="backToTopBtn" title="Go to top">↑</button>
     <footer class="footer-container">
         <div class="footer">
             <span class="copyright" id="copyright">
@@ -110,18 +193,48 @@
         function displayAPOD(data) {
             const imageElement = document.getElementById('apodImage');
             const explanationElement = document.getElementById('apodExplanation');
+            const preloader = document.getElementById('preloader');
 
             if (data.media_type === "image") {
+                imageElement.onload = function () {
+                    preloader.style.display = "none"; // Hide preloader when image is loaded
+                };
                 imageElement.src = data.url;
                 imageElement.alt = data.title;
             } else {
-                imageElement.style.display = "none"; // Hide the image element if the media type is not an image
+                preloader.style.display = "none"; // Hide preloader if there's no image
+                imageElement.style.display = "none";
             }
 
             explanationElement.textContent = data.explanation;
         }
+
+        // Get the button
+        var mybutton = document.getElementById("backToTopBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function () {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        mybutton.addEventListener('click', function () {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
+        });
+
     </script>
     <script src="/script.js"></script>
+
+
 </body>
 
 </html>
