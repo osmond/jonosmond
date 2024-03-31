@@ -208,19 +208,22 @@ video {
     /* Keep the state after animation ends */
 }
 
+/* Initial state of the menu items */
 .fullscreen-nav ul li a {
     color: #fff;
     text-decoration: none;
     font-size: clamp(2rem, 5vw + 1rem, 6rem);
-    /* Matched font size for consistency */
     font-family: "Climate Crisis", sans-serif;
-    /* Ensure consistency in font */
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition for color and transform */
+    display: inline-block; /* Allows transform */
 }
 
-/* Applying the hover effect to menu items */
+/* Hover effect */
 .fullscreen-nav ul li a:hover {
-    animation: pulseWeight 0.5s ease forwards;
+    color: #58a6ff; 
+    transform: scale(1.1); /* Slightly enlarge the text */
 }
+
 
 /* Show Menu */
 .fullscreen-nav.show {
