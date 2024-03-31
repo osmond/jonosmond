@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astronomy Picture of the Day</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body {
+
+            margin: 0;
+            padding: 0;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+
+        }
+
+        h1 {
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-family: "Climate Crisis", sans-serif;
+            color: white !important;
+            font-size: 2em !important;
+            padding: 2em 1em 1em;
+        }
+
+        img {
+            max-width: 90%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        p {
+            max-width: 700px;
+            margin: 20px auto;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            p {
+                max-width: 90%;
+            }
+        }
+
+        .footer-container {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- SVG Menu Toggle with ARIA Label for Accessibility -->
+        <svg viewBox="0 0 800 600" id="menuToggle" aria-label="Menu toggle">
+            <path d="M300,220 C300,220 520,220 540,220 C740,220 640,540 520,420 C440,340 300,200 300,200"
+                class="top_bar">
+            </path>
+            <path d="M300,320 L540,320" class="middle_bar"></path>
+            <path d="M300,210 C300,210 520,210 540,210 C740,210 640,530 520,410 C440,330 300,190 300,190"
+                class="bottom_bar" transform="translate(480, 320) scale(1, -1) translate(-480, -318)"></path>
+        </svg>
+    </header>
+
+    <nav id="fullScreenNav" class="fullscreen-nav">
+        <ul>
+            <li><a href="index.html" tabindex="0">Home</a></li>
+            <li><a href="#" class="inactive" tabindex="0">Plants</a></li>
+            <li><a href="#" class="inactive" tabindex="-1">Birds</a></li>
+            <li><a href="/nasa/index.html" tabindex="0">APOD</a></li>
+            <li><a href="https://www.linkedin.com/in/josmond/" tabindex="0">LinkedIn</a></li>
+        </ul>
+    </nav>
+    <h1 class="animated-text">NASA's Astronomy Picture of the Day</h1>
+    <img id="apodImage" src="" alt="Astronomy Picture of the Day">
+    <p id="apodExplanation"></p>
+    <footer class="footer-container">
+        <div class="footer">
+            <span class="copyright" id="copyright">
+                <!-- Copyright text will be inserted here -->
+            </span>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchAPOD();
+        });
+
+        function fetchAPOD() {
+            const apiKey = 'VxfAgflYv6t9YOpHr2DmX2c4F4nhxgjkmNFivpvO';
+            const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    displayAPOD(data);
+                })
+                .catch(error => {
+                    console.error('Fetching APOD failed:', error);
+                });
+        }
+
+        function displayAPOD(data) {
+            const imageElement = document.getElementById('apodImage');
+            const explanationElement = document.getElementById('apodExplanation');
+
+            if (data.media_type === "image") {
+                imageElement.src = data.url;
+                imageElement.alt = data.title;
+            } else {
+                imageElement.style.display = "none"; // Hide the image element if the media type is not an image
+            }
+
+            explanationElement.textContent = data.explanation;
+        }
+    </script>
+    <script src="/script.js"></script>
+</body>
+
+</html>
