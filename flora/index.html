@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plant Observations Gallery | Jon Osmond - Web Developer in Minnesota</title>
+<meta name="description" content="Explore the Plant Observations Gallery curated by Jon Osmond. Dive into the diverse world of plants through detailed observations and photographs.">
+
+<!-- Open Graph Tags -->
+<meta property="og:url" content="https://jonosmond.com/plant-observations-gallery">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Plant Observations Gallery by Jon Osmond">
+<meta property="og:description" content="Jon Osmond's Plant Observations Gallery showcases a diverse range of plants through detailed observations and stunning photographs.">
+<meta property="og:image" content="https://jonosmond.com/jon-osmond.jpeg">
+
+<!-- Twitter Card data -->
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://jonosmond.com/plant-observations-gallery">
+<meta name="twitter:title" content="Plant Observations Gallery | Jon Osmond">
+<meta name="twitter:description" content="Discover the beauty of plants in Jon Osmond's Plant Observations Gallery. Explore detailed observations and photographs.">
+<meta name="twitter:image" content="https://jonosmond.com/jon-osmond.jpeg">
+
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+    
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            margin: 0; /* Ensures there is no default margin */
+        }
+    
+        .gallery {
+            column-count: 4; /* Adjust the number of columns based on your preference */
+            column-gap: 20px; /* This defines the gap between columns */
+        }
+    
+        .observation {
+            border: 1px solid #eee; /* Lighter border */
+            padding: 20px;
+            background-color: #fff; /* Pure white background */
+            margin-bottom: 20px; /* Space between items, adjust as needed */
+            display: inline-block; /* This makes the element respect the column layout */
+            width: 100%; /* Ensures the observation fills the column width */
+            box-sizing: border-box; /* Includes padding and border in the element's total width */
+            break-inside: avoid; /* Prevents items from being split across columns */
+            transition: box-shadow 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effects */
+        }
+    
+        .observation:hover {
+            transform: translateY(-5px); /* Lifts the item slightly on hover */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow effect on hover */
+        }
+    
+        .observation img {
+            width: 100%;
+            height: auto; /* Ensures the image scales correctly */
+            border-radius: 5px;
+            margin-bottom: 10px; /* Adds space between the image and the text/content below */
+        }
+    
+        @media (max-width: 1200px) {
+            .gallery {
+                column-count: 3; /* Adjust for medium screens */
+            }
+        }
+    
+        @media (max-width: 800px) {
+            .gallery {
+                column-count: 2; /* Adjust for small screens */
+            }
+        }
+    
+        @media (max-width: 400px) {
+            .gallery {
+                column-count: 1; /* Single column for very small screens */
+            }
+        }
+    </style>
+    
+</head>
+
+<body>
+    <header>
+        <!-- SVG Menu Toggle with ARIA Label for Accessibility -->
+        <svg viewBox="0 0 800 600" id="menuToggle" aria-label="Menu toggle">
+            <path d="M300,220 C300,220 520,220 540,220 C740,220 640,540 520,420 C440,340 300,200 300,200"
+                class="top_bar">
+            </path>
+            <path d="M300,320 L540,320" class="middle_bar"></path>
+            <path d="M300,210 C300,210 520,210 540,210 C740,210 640,530 520,410 C440,330 300,190 300,190"
+                class="bottom_bar" transform="translate(480, 320) scale(1, -1) translate(-480, -318)"></path>
+        </svg>
+    </header>
+
+    <nav id="fullScreenNav" class="fullscreen-nav">
+        <ul>
+            <li><a href="index.html" tabindex="0">Home</a></li>
+            <li><a href="/flora/index.html" tabindex="0">Plants</a></li>
+            <li><a href="#" class="inactive" tabindex="-1">Birds</a></li>
+            <li><a href="/nasa/index.html" tabindex="0">APOD</a></li>
+            <li><a href="https://www.linkedin.com/in/josmond/" tabindex="0">LinkedIn</a></li>
+        </ul>
+    </nav>
+    <h1>Explore the Wild Beauty: Plant Observations from Minnesota and Wisconsin</h1>
+    <p>Embark on a virtual exploration of the untamed beauty and botanical diversity found in the heartlands of
+        Minnesota and Wisconsin with our Interactive Plant Observations Gallery.</p>
+    <div id="gallery" class="gallery"></div>
+    <button id="loadMore">Load More</button>
+
+    <script src="/script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchObservations();
+        });
+
+        let page = 1; // Initialize page counter to keep track of pagination
+        let msnry; // Variable to store the Masonry instance
+
+        function toTitleCase(str) {
+            return str.toLowerCase()
+                .split(' ')
+                .map(word => word.split('-')
+                    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+                    .join('-'))
+                .join(' ');
+        }
+
+        function fetchObservations() {
+            const perPage = 20; // Define how many observations to fetch per page
+            const apiUrl = `https://api.inaturalist.org/v1/observations?quality_grade=research&identifications=any&captive=false&iconic_taxa[]=Plantae&place_id=124854&verifiable=true&popular=true&spam=false&page=${page}&per_page=${perPage}`;
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    populateGallery(data.results);
+                    page++; // Increment the page counter for the next load
+                })
+                .catch(error => {
+                    console.error('Error fetching data: ', error);
+                });
+        }
+
+        function populateGallery(observations) {
+            const gallery = document.getElementById('gallery');
+            observations.forEach(observation => {
+                if (observation.photos.length > 0) {
+                    const observationElement = document.createElement('div');
+                    observationElement.className = 'observation';
+                    observationElement.style.opacity = '0'; // Set initial opacity for animation
+
+                    const linkElement = document.createElement('a');
+                    linkElement.href = `https://www.inaturalist.org/observations/${observation.id}`;
+                    linkElement.target = "_blank";
+
+                    const imageElement = document.createElement('img');
+                    imageElement.src = observation.photos[0].url.replace('square', 'medium');
+                    imageElement.alt = observation.species_guess ? toTitleCase(observation.species_guess) : 'Observation image';
+                    linkElement.appendChild(imageElement);
+                    observationElement.appendChild(linkElement);
+
+                    // Common Name
+                    const commonNameElement = document.createElement('h3');
+                    commonNameElement.textContent = observation.species_guess ? toTitleCase(observation.species_guess) : 'Unknown';
+                    observationElement.appendChild(commonNameElement);
+
+                    // Scientific Name
+                    const scientificNameElement = document.createElement('p');
+                    scientificNameElement.textContent = observation.taxon ? observation.taxon.name : 'Species';
+                    scientificNameElement.classList.add('scientific-name'); // Apply class for styling
+                    observationElement.appendChild(scientificNameElement);
+
+                    // Date Observed
+                    const dateObservedElement = document.createElement('p');
+                    const observedDate = observation.observed_on_details.date ? new Date(observation.observed_on_details.date).toLocaleDateString() : 'Unknown Date';
+                    dateObservedElement.textContent = `Date Observed: ${observedDate}`;
+                    dateObservedElement.classList.add('details'); // Apply class for styling
+                    observationElement.appendChild(dateObservedElement);
+
+                    // Location
+                    const placeElement = document.createElement('p');
+                    placeElement.textContent = `Location: ${observation.place_guess || 'Unknown Location'}`;
+                    placeElement.classList.add('details'); // Apply class for styling
+                    observationElement.appendChild(placeElement);
+
+                    gallery.appendChild(observationElement);
+                    setTimeout(() => observationElement.style.opacity = '1', 100); // Smoothly transition opacity
+                }
+            });
+
+            // Check if Masonry has been initialized
+            if (msnry) {
+                // Layout Masonry again with the new items
+                msnry.reloadItems();
+                msnry.layout();
+            } else {
+                // Initialize Masonry for the first time
+                msnry = new Masonry('.gallery', {
+                    itemSelector: '.observation',
+                    columnWidth: '.observation',
+                    percentPosition: true
+                });
+            }
+        }
+
+        // Load More button functionality
+        document.getElementById('loadMore').addEventListener('click', function () {
+            fetchObservations();
+        });
+    </script>
+
+
+
+
+
+</body>
+
+</html>
