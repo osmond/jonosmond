@@ -4,84 +4,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plant Observations Gallery | Jon Osmond - Web Developer in Minnesota</title>
-<meta name="description" content="Explore the Plant Observations Gallery curated by Jon Osmond. Dive into the diverse world of plants through detailed observations and photographs.">
+    <title>Plant Observations Gallery | Jon Osmond - Web Developer in Minnesota</title>
+    <meta name="description"
+        content="Explore the Plant Observations Gallery curated by Jon Osmond. Dive into the diverse world of plants through detailed observations and photographs.">
 
-<!-- Open Graph Tags -->
-<meta property="og:url" content="https://jonosmond.com/plant-observations-gallery">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Plant Observations Gallery by Jon Osmond">
-<meta property="og:description" content="Jon Osmond's Plant Observations Gallery showcases a diverse range of plants through detailed observations and stunning photographs.">
-<meta property="og:image" content="https://jonosmond.com/jon-osmond.jpeg">
+    <!-- Open Graph Tags -->
+    <meta property="og:url" content="https://jonosmond.com/plant-observations-gallery">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Plant Observations Gallery by Jon Osmond">
+    <meta property="og:description"
+        content="Jon Osmond's Plant Observations Gallery showcases a diverse range of plants through detailed observations and stunning photographs.">
+    <meta property="og:image" content="https://jonosmond.com/jon-osmond.jpeg">
 
-<!-- Twitter Card data -->
-<meta name="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://jonosmond.com/plant-observations-gallery">
-<meta name="twitter:title" content="Plant Observations Gallery | Jon Osmond">
-<meta name="twitter:description" content="Discover the beauty of plants in Jon Osmond's Plant Observations Gallery. Explore detailed observations and photographs.">
-<meta name="twitter:image" content="https://jonosmond.com/jon-osmond.jpeg">
-
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://jonosmond.com/plant-observations-gallery">
+    <meta name="twitter:title" content="Plant Observations Gallery | Jon Osmond">
+    <meta name="twitter:description"
+        content="Discover the beauty of plants in Jon Osmond's Plant Observations Gallery. Explore detailed observations and photographs.">
+    <meta name="twitter:image" content="https://jonosmond.com/jon-osmond.jpeg">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;><text y=&#39;0.9em&#39; font-size=&#39;90&#39;>😎</text></svg>">
     <link rel="stylesheet" href="/styles.css">
     <style>
         * {
             box-sizing: border-box;
         }
-    
+
+        :root {
+            --font-size-small: 0.8rem;
+            --font-size-base: 1rem;
+            /* Default font size */
+            --font-size-large: 1.25rem;
+            --font-size-xl: 1.5rem;
+            --font-size-xxl: 2rem;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
             padding: 20px;
-            margin: 0; /* Ensures there is no default margin */
+            margin: 0;
+            font-size: var(--font-size-base);
         }
-    
+
+        h1 {
+            font-size: var(--font-size-xxl);
+        }
+
+        h3 {
+            font-size: var(--font-size-large);
+        }
+
+        p,
+        .details {
+            font-size: var(--font-size-base);
+        }
+
+        .scientific-name {
+            font-style: italic;
+            font-size: var(--font-size-small);
+        }
+
         .gallery {
-            column-count: 4; /* Adjust the number of columns based on your preference */
-            column-gap: 20px; /* This defines the gap between columns */
+            column-count: 4;
+            column-gap: 20px;
         }
-    
+
         .observation {
-            border: 1px solid #eee; /* Lighter border */
+            border: 1px solid #eee;
             padding: 20px;
-            background-color: #fff; /* Pure white background */
-            margin-bottom: 20px; /* Space between items, adjust as needed */
-            display: inline-block; /* This makes the element respect the column layout */
-            width: 100%; /* Ensures the observation fills the column width */
-            box-sizing: border-box; /* Includes padding and border in the element's total width */
-            break-inside: avoid; /* Prevents items from being split across columns */
-            transition: box-shadow 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effects */
+            background-color: #fff;
+            margin-bottom: 20px;
+            display: inline-block;
+            width: 100%;
+            box-sizing: border-box;
+            break-inside: avoid;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
         }
-    
+
         .observation:hover {
-            transform: translateY(-5px); /* Lifts the item slightly on hover */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow effect on hover */
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-    
+
         .observation img {
             width: 100%;
-            height: auto; /* Ensures the image scales correctly */
+            height: auto;
             border-radius: 5px;
-            margin-bottom: 10px; /* Adds space between the image and the text/content below */
+            margin-bottom: 10px;
         }
-    
+
         @media (max-width: 1200px) {
             .gallery {
-                column-count: 3; /* Adjust for medium screens */
+                column-count: 3;
             }
         }
-    
+
         @media (max-width: 800px) {
+            :root {
+                --font-size-base: 0.9rem;
+                --font-size-large: 1.1rem;
+                --font-size-xl: 1.3rem;
+                --font-size-xxl: 1.75rem;
+            }
+
             .gallery {
-                column-count: 2; /* Adjust for small screens */
+                column-count: 2;
             }
         }
-    
+
         @media (max-width: 400px) {
+            :root {
+                --font-size-base: 0.85rem;
+                --font-size-large: 1rem;
+                --font-size-xl: 1.2rem;
+                --font-size-xxl: 1.5rem;
+            }
+
             .gallery {
-                column-count: 1; /* Single column for very small screens */
+                column-count: 1;
             }
         }
     </style>
-    
+
+
 </head>
 
 <body>
@@ -99,7 +146,7 @@
 
     <nav id="fullScreenNav" class="fullscreen-nav">
         <ul>
-            <li><a href="index.html" tabindex="0">Home</a></li>
+            <li><a href="/index.html" tabindex="0">Home</a></li>
             <li><a href="/flora/index.html" tabindex="0">Plants</a></li>
             <li><a href="#" class="inactive" tabindex="-1">Birds</a></li>
             <li><a href="/nasa/index.html" tabindex="0">APOD</a></li>
