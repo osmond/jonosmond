@@ -232,14 +232,15 @@
 
     <script src="/script.js"></script>
 
+
+
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             fetchObservations();
         });
-
+        
         let page = 1; // Initialize page counter to keep track of pagination
-        let msnry; // Variable to store the Masonry instance
-
+        
         function toTitleCase(str) {
             return str.toLowerCase()
                 .split(' ')
@@ -248,7 +249,7 @@
                     .join('-'))
                 .join(' ');
         }
-
+        
         function fetchObservations() {
             const perPage = 20; // Define how many observations to fetch per page
             const apiUrl = `https://api.inaturalist.org/v1/observations?quality_grade=research&identifications=any&captive=false&iconic_taxa[]=Plantae&place_id=124854&verifiable=true&popular=true&spam=false&page=${page}&per_page=${perPage}`;
@@ -262,7 +263,7 @@
                     console.error('Error fetching data: ', error);
                 });
         }
-
+        
         function populateGallery(observations) {
             const gallery = document.getElementById('gallery');
             observations.forEach(observation => {
@@ -270,69 +271,53 @@
                     const observationElement = document.createElement('div');
                     observationElement.className = 'observation';
                     observationElement.style.opacity = '0'; // Set initial opacity for animation
-
+        
                     const linkElement = document.createElement('a');
                     linkElement.href = `https://www.inaturalist.org/observations/${observation.id}`;
                     linkElement.target = "_blank";
-
+        
                     const imageElement = document.createElement('img');
                     imageElement.src = observation.photos[0].url.replace('square', 'medium');
                     imageElement.alt = observation.species_guess ? toTitleCase(observation.species_guess) : 'Observation image';
                     linkElement.appendChild(imageElement);
                     observationElement.appendChild(linkElement);
-
+        
                     // Common Name
                     const commonNameElement = document.createElement('h3');
                     commonNameElement.textContent = observation.species_guess ? toTitleCase(observation.species_guess) : 'Unknown';
                     observationElement.appendChild(commonNameElement);
-
+        
                     // Scientific Name
                     const scientificNameElement = document.createElement('p');
                     scientificNameElement.textContent = observation.taxon ? observation.taxon.name : 'Species';
                     scientificNameElement.classList.add('scientific-name'); // Apply class for styling
                     observationElement.appendChild(scientificNameElement);
-
+        
                     // Date Observed
                     const dateObservedElement = document.createElement('p');
                     const observedDate = observation.observed_on_details.date ? new Date(observation.observed_on_details.date).toLocaleDateString() : 'Unknown Date';
                     dateObservedElement.textContent = `Date Observed: ${observedDate}`;
                     dateObservedElement.classList.add('details'); // Apply class for styling
                     observationElement.appendChild(dateObservedElement);
-
+        
                     // Location
                     const placeElement = document.createElement('p');
                     placeElement.textContent = `Location: ${observation.place_guess || 'Unknown Location'}`;
                     placeElement.classList.add('details'); // Apply class for styling
                     observationElement.appendChild(placeElement);
-
+        
                     gallery.appendChild(observationElement);
                     setTimeout(() => observationElement.style.opacity = '1', 100); // Smoothly transition opacity
                 }
             });
-
-            // Check if Masonry has been initialized
-            if (msnry) {
-                // Layout Masonry again with the new items
-                msnry.reloadItems();
-                msnry.layout();
-            } else {
-                // Initialize Masonry for the first time
-                msnry = new Masonry('.gallery', {
-                    itemSelector: '.observation',
-                    columnWidth: '.observation',
-                    percentPosition: true
-                });
-            }
         }
-
+        
         // Load More button functionality
-        document.getElementById('loadMore').addEventListener('click', function () {
+        document.getElementById('loadMore').addEventListener('click', function() {
             fetchObservations();
         });
-    </script>
-
-
-
+        </script>
+        
 
 
 </body>
