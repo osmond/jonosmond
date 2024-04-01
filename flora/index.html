@@ -32,13 +32,28 @@
         }
 
         :root {
+            /* Existing font size variables */
             --font-size-small: 0.8rem;
             --font-size-base: 1rem;
-            /* Default font size */
             --font-size-large: 1.25rem;
             --font-size-xl: 1.5rem;
             --font-size-xxl: 2rem;
+
+            /* New color variables */
+            --color-primary: #4B644A;
+            /* A deep green, reminiscent of forest foliage */
+            --color-secondary: #DAD2BC;
+            /* A light, sandy beige for background accents */
+            --color-accent: #9C9F84;
+            /* A muted olive for highlights and accents */
+            --color-text: #333;
+            /* A deep gray for text, ensuring readability */
+            --color-border: #CCC;
+            /* A light gray for borders, softening the overall look */
+            --color-background: #F5F5F5;
+            /* A very light gray or off-white for the background */
         }
+
 
         body {
             font-family: 'Inter', sans-serif;
@@ -46,7 +61,12 @@
             padding: 20px;
             margin: 0;
             font-size: var(--font-size-base);
+            color: var(--color-text);
+            /* Applying text color */
+            background-color: var(--color-background);
+            /* Applying background color */
         }
+
 
         h1 {
             font-size: var(--font-size-xxl);
@@ -66,13 +86,18 @@
             font-size: var(--font-size-small);
         }
 
+        #gallery {
+            margin-top: 1em;
+        }
+
         .gallery {
             column-count: 4;
             column-gap: 20px;
         }
 
         .observation {
-            border: 1px solid #eee;
+            border: 1px solid var(--color-border);
+            /* Using the border color variable */
             padding: 20px;
             background-color: #fff;
             margin-bottom: 20px;
@@ -82,6 +107,7 @@
             break-inside: avoid;
             transition: box-shadow 0.3s ease, transform 0.3s ease;
         }
+
 
         .observation:hover {
             transform: translateY(-5px);
@@ -126,6 +152,49 @@
                 column-count: 1;
             }
         }
+
+
+
+        #loadMore {
+            padding: 10px 20px;
+            background-color: #28a745;
+            /* Bootstrap's 'success' green for demonstration */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: var(--font-size-large);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: block;
+            /* Changed to block to allow for centering */
+            margin: 20px auto;
+            /* Centers the button horizontally with automatic left and right margins */
+            text-align: center;
+            /* Ensures the text within the button is centered */
+        }
+
+        #loadMore:hover {
+            background-color: #218838;
+            /* A slightly darker green for hover effect */
+            transform: translateY(-2px);
+            /* Slight lift effect on hover for interaction feedback */
+        }
+
+        @media (max-width: 800px) {
+            #loadMore {
+                font-size: var(--font-size-base);
+                padding: 12px 18px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            #loadMore {
+                width: 90%;
+                /* Adjusting the width for very small screens while keeping some margin */
+                padding: 15px;
+                font-size: var(--font-size-large);
+            }
+        }
     </style>
 
 
@@ -153,9 +222,11 @@
             <li><a href="https://www.linkedin.com/in/josmond/" tabindex="0">LinkedIn</a></li>
         </ul>
     </nav>
-    <h1>Explore the Wild Beauty: Plant Observations from Minnesota and Wisconsin</h1>
-    <p>Embark on a virtual exploration of the untamed beauty and botanical diversity found in the heartlands of
-        Minnesota and Wisconsin with our Interactive Plant Observations Gallery.</p>
+    <div class="hero">
+        <h1>Explore the Wild Beauty: Plant Observations from Minnesota and Wisconsin</h1>
+        <p>Embark on a virtual exploration of the untamed beauty and botanical diversity found in the heartlands of
+            Minnesota and Wisconsin with our Interactive Plant Observations Gallery.</p>
+    </div>
     <div id="gallery" class="gallery"></div>
     <button id="loadMore">Load More</button>
 

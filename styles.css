@@ -419,10 +419,7 @@ svg#menuToggle {
     }
 }
 
-.gallery-item,
-#loadMore {
-    animation: fadeIn 1s ease-out;
-}
+
 
 /* Container Styles */
 .container {
@@ -443,9 +440,7 @@ svg#menuToggle {
         column-count: 2;
     }
 
-    #loadMore {
-        width: 80%;
-    }
+
 
     h1 {
         font-size: 2rem;
@@ -465,9 +460,7 @@ svg#menuToggle {
         padding: 10px;
     }
 
-    .gallery {
-        column-count: 1;
-    }
+
 
     h1 {
         font-size: 1.5rem;
