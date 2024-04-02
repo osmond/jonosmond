@@ -27,201 +27,222 @@
         href="data:image/svg+xml,<svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;><text y=&#39;0.9em&#39; font-size=&#39;90&#39;>😎</text></svg>">
     <link rel="stylesheet" href="/styles.css">
     <style>
+        /* Base element and global styles */
         * {
             box-sizing: border-box;
         }
 
         :root {
-            /* Existing font size variables */
+            /* Font size variables */
             --font-size-small: 0.8rem;
             --font-size-base: 1rem;
             --font-size-large: 1.25rem;
             --font-size-xl: 1.5rem;
             --font-size-xxl: 2rem;
 
-            /* New color variables */
+            /* Color variables */
             --color-primary: #4B644A;
-            /* A deep green, reminiscent of forest foliage */
             --color-secondary: #DAD2BC;
-            /* A light, sandy beige for background accents */
             --color-accent: #9C9F84;
-            /* A muted olive for highlights and accents */
             --color-text: #333;
-            /* A deep gray for text, ensuring readability */
-            --color-border: #CCC;
-            /* A light gray for borders, softening the overall look */
+            --color-border: #ddd;
             --color-background: #F5F5F5;
-            /* A very light gray or off-white for the background */
-        }
 
+            /* Gradient variables */
+            --gradient-morning: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            --gradient-day: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+            --gradient-evening: linear-gradient(120deg, #fa709a 0%, #fee140 100%);
+            --gradient-night: linear-gradient(120deg, #2c3e50 0%, #3498db 100%);
+
+            /* Reusable spacing variables */
+            --spacing-small: 10px;
+            --spacing-medium: 20px;
+            --spacing-large: 30px;
+            --border-radius: 5px;
+        }
 
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            padding: 20px;
+            padding: var(--spacing-medium);
             margin: 0;
             font-size: var(--font-size-base);
             color: var(--color-text);
-            /* Applying text color */
             background-color: var(--color-background);
-            /* Applying background color */
         }
 
-        h1 {
-            font-size: var(--font-size-xxl);
-        }
-
-        h3 {
-            font-size: var(--font-size-large);
-        }
-
+        /* Component and element-specific styles */
         .hero {
             text-align: center;
-            /* Center-aligns the content */
-            padding: 20px;
-            /* Adds some padding around the text */
+            padding: var(--spacing-medium);
         }
 
         .hero h1 {
-            margin-bottom: 10px;
-            /* Adds space below the h1 before the p tag */
-            /* Other styling for h1 */
+            margin-bottom: var(--spacing-small);
+            color: var(--color-background);
         }
 
         .hero p {
             color: var(--color-background);
-            /* Ensures the text color is visible against the background */
-            padding-left: 0;
-            /* Adjusts padding as needed */
-            /* Additional styling for p */
-        }
-
-        p,
-        .details {
-            font-size: var(--font-size-base);
-        }
-
-        .scientific-name {
-            font-style: italic;
-            font-size: var(--font-size-small);
-        }
-
-        #gallery {
-            margin-top: 1em;
-        }
-
-        .gallery {
-            column-count: 4;
-            column-gap: 20px;
         }
 
         .observation {
             border: 1px solid var(--color-border);
-            /* Using the border color variable */
-            padding: 20px;
+            padding: var(--spacing-medium);
             background-color: #fff;
-            margin-bottom: 20px;
+            margin-bottom: var(--spacing-medium);
             display: inline-block;
             width: 100%;
-            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             break-inside: avoid;
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
         }
 
+        .observation h3 {
+            font-size: var(--font-size-large);
+            margin-bottom: var(--spacing-small);
+        }
+
+        .observation .scientific-name {
+            font-style: italic;
+            font-size: var(--font-size-small);
+            color: var(--color-accent);
+            margin-bottom: var(--spacing-small);
+        }
+
+        .observation .details {
+            font-size: var(--font-size-base);
+            margin-bottom: var(--spacing-small);
+        }
+
+        .observation .details:first-of-type {
+            font-weight: bold;
+        }
+
+        .observation img {
+            width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+            margin-bottom: var(--spacing-small);
+        }
 
         .observation:hover {
             transform: translateY(-5px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .observation img {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        @media (max-width: 1200px) {
-            .gallery {
-                column-count: 3;
-            }
-        }
-
-        @media (max-width: 800px) {
-            :root {
-                --font-size-base: 0.9rem;
-                --font-size-large: 1.1rem;
-                --font-size-xl: 1.3rem;
-                --font-size-xxl: 1.75rem;
-            }
-
-            .gallery {
-                column-count: 2;
-            }
-        }
-
-        @media (max-width: 400px) {
-            :root {
-                --font-size-base: 0.85rem;
-                --font-size-large: 1rem;
-                --font-size-xl: 1.2rem;
-                --font-size-xxl: 1.5rem;
-            }
-
-            .gallery {
-                column-count: 1;
-            }
-        }
-
-
-
         #loadMore {
             padding: 10px 20px;
             background-color: #28a745;
-            /* Bootstrap's 'success' green for demonstration */
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: var(--border-radius);
             font-size: var(--font-size-large);
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
             display: block;
-            /* Changed to block to allow for centering */
             margin: 20px auto;
-            /* Centers the button horizontally with automatic left and right margins */
             text-align: center;
-            /* Ensures the text within the button is centered */
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
         #loadMore:hover {
             background-color: #218838;
-            /* A slightly darker green for hover effect */
             transform: translateY(-2px);
-            /* Slight lift effect on hover for interaction feedback */
         }
 
+        /* Responsive adjustments */
         @media (max-width: 800px) {
+            :root {
+                --font-size-small: 0.75rem;
+                --font-size-base: 0.95rem;
+                --font-size-large: 1.1rem;
+                --font-size-xl: 1.25rem;
+                --font-size-xxl: 1.5rem;
+            }
+
             #loadMore {
                 font-size: var(--font-size-base);
                 padding: 12px 18px;
             }
         }
 
-        @media (max-width: 400px) {
+        @media (max-width: 430px) {
+            :root {
+                --font-size-small: 0.7rem;
+                --font-size-base: 0.9rem;
+                --font-size-large: 1rem;
+                --font-size-xl: 1.15rem;
+                --font-size-xxl: 1.4rem;
+            }
+
             #loadMore {
                 width: 90%;
-                /* Adjusting the width for very small screens while keeping some margin */
                 padding: 15px;
                 font-size: var(--font-size-large);
             }
+
+            .observation {
+                padding: 15px;
+            }
         }
 
-        span#copyright {
-            color: var(--color-text);
+        /* Masonry layout adjustments */
+        .gallery {
+            -moz-column-count: 4;
+            -webkit-column-count: 4;
+            column-count: 4;
+            -moz-column-gap: 20px;
+            -webkit-column-gap: 20px;
+            column-gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .gallery {
+                -moz-column-count: 3;
+                -webkit-column-count: 3;
+                column-count: 3;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .gallery {
+                -moz-column-count: 2;
+                -webkit-column-count: 2;
+                column-count: 2;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .gallery {
+                -moz-column-count: 1;
+                -webkit-column-count: 1;
+                column-count: 1;
+            }
+        }
+
+        /* Enhanced visibility for dark mode */
+        @media (prefers-color-scheme: dark) {
+            .observation {
+                border-color: #EEE;
+                /* Lighter for dark backgrounds */
+            }
+        }
+
+        @keyframes slideInFromBottom {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .observation {
+            animation: slideInFromBottom 0.5s ease-out forwards;
         }
     </style>
-
-
 </head>
 
 <body>
@@ -246,16 +267,11 @@
             <li><a href="https://www.linkedin.com/in/josmond/">LinkedIn</a></li>
         </ul>
     </nav>
-    
+
     <div class="hero">
-        <video autoplay loop muted playsinline id="plantPageHeroVideo">
-            <source src="" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
         <h1 class="animated-text">Explore Wild Beauty</h1>
         <p>Plant Observations from Minnesota and Wisconsin.</p>
     </div>
-
 
     <div id="gallery" class="gallery"></div>
     <button id="loadMore">Load More</button>
@@ -267,94 +283,6 @@
         </div>
     </footer>
     <script src="/script.js"></script>
-
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            fetchObservations();
-        });
-
-        let page = 1; // Initialize page counter to keep track of pagination
-
-        function toTitleCase(str) {
-            return str.toLowerCase()
-                .split(' ')
-                .map(word => word.split('-')
-                    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-                    .join('-'))
-                .join(' ');
-        }
-
-        function fetchObservations() {
-            const perPage = 20; // Define how many observations to fetch per page
-            const apiUrl = `https://api.inaturalist.org/v1/observations?quality_grade=research&identifications=any&captive=false&iconic_taxa[]=Plantae&place_id=124854&verifiable=true&popular=true&spam=false&page=${page}&per_page=${perPage}`;
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    populateGallery(data.results);
-                    page++; // Increment the page counter for the next load
-                })
-                .catch(error => {
-                    console.error('Error fetching data: ', error);
-                });
-        }
-
-        function populateGallery(observations) {
-            const gallery = document.getElementById('gallery');
-            observations.forEach(observation => {
-                if (observation.photos.length > 0) {
-                    const observationElement = document.createElement('div');
-                    observationElement.className = 'observation';
-                    observationElement.style.opacity = '0'; // Set initial opacity for animation
-
-                    const linkElement = document.createElement('a');
-                    linkElement.href = `https://www.inaturalist.org/observations/${observation.id}`;
-                    linkElement.target = "_blank";
-
-                    const imageElement = document.createElement('img');
-                    imageElement.src = observation.photos[0].url.replace('square', 'medium');
-                    imageElement.alt = observation.species_guess ? toTitleCase(observation.species_guess) : 'Observation image';
-                    linkElement.appendChild(imageElement);
-                    observationElement.appendChild(linkElement);
-
-                    // Common Name
-                    const commonNameElement = document.createElement('h3');
-                    commonNameElement.textContent = observation.species_guess ? toTitleCase(observation.species_guess) : 'Unknown';
-                    observationElement.appendChild(commonNameElement);
-
-                    // Scientific Name
-                    const scientificNameElement = document.createElement('p');
-                    scientificNameElement.textContent = observation.taxon ? observation.taxon.name : 'Species';
-                    scientificNameElement.classList.add('scientific-name'); // Apply class for styling
-                    observationElement.appendChild(scientificNameElement);
-
-                    // Date Observed
-                    const dateObservedElement = document.createElement('p');
-                    const observedDate = observation.observed_on_details.date ? new Date(observation.observed_on_details.date).toLocaleDateString() : 'Unknown Date';
-                    dateObservedElement.textContent = `Date Observed: ${observedDate}`;
-                    dateObservedElement.classList.add('details'); // Apply class for styling
-                    observationElement.appendChild(dateObservedElement);
-
-                    // Location
-                    const placeElement = document.createElement('p');
-                    placeElement.textContent = `Location: ${observation.place_guess || 'Unknown Location'}`;
-                    placeElement.classList.add('details'); // Apply class for styling
-                    observationElement.appendChild(placeElement);
-
-                    gallery.appendChild(observationElement);
-                    setTimeout(() => observationElement.style.opacity = '1', 100); // Smoothly transition opacity
-                }
-            });
-        }
-
-        // Load More button functionality
-        document.getElementById('loadMore').addEventListener('click', function () {
-            fetchObservations();
-        });
-    </script>
-
-
 
 </body>
 
