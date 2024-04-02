@@ -39,7 +39,7 @@ body {
 .animated-text {
     font-family: "Climate Crisis", sans-serif;
     font-size: clamp(2rem, 5vw + 1rem, 6rem);
-    color: black;
+    color:white;
     animation: pulseWeight 3s ease forwards;
     animation-iteration-count: 2;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);

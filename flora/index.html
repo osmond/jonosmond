@@ -67,13 +67,33 @@
             /* Applying background color */
         }
 
-
         h1 {
             font-size: var(--font-size-xxl);
         }
 
         h3 {
             font-size: var(--font-size-large);
+        }
+
+        .hero {
+            text-align: center;
+            /* Center-aligns the content */
+            padding: 20px;
+            /* Adds some padding around the text */
+        }
+
+        .hero h1 {
+            margin-bottom: 10px;
+            /* Adds space below the h1 before the p tag */
+            /* Other styling for h1 */
+        }
+
+        .hero p {
+            color: var(--color-background);
+            /* Ensures the text color is visible against the background */
+            padding-left: 0;
+            /* Adjusts padding as needed */
+            /* Additional styling for p */
         }
 
         p,
@@ -195,6 +215,10 @@
                 font-size: var(--font-size-large);
             }
         }
+
+        span#copyright {
+            color: var(--color-text);
+        }
     </style>
 
 
@@ -215,32 +239,44 @@
 
     <nav id="fullScreenNav" class="fullscreen-nav">
         <ul>
-            <li><a href="/index.html" tabindex="0">Home</a></li>
-            <li><a href="/flora/index.html" tabindex="0">Plants</a></li>
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/flora/index.html">Plants</a></li>
             <li><a href="#" class="inactive" tabindex="-1">Birds</a></li>
-            <li><a href="/nasa/index.html" tabindex="0">APOD</a></li>
-            <li><a href="https://www.linkedin.com/in/josmond/" tabindex="0">LinkedIn</a></li>
+            <li><a href="/nasa/index.html">APOD</a></li>
+            <li><a href="https://www.linkedin.com/in/josmond/">LinkedIn</a></li>
         </ul>
     </nav>
+    
     <div class="hero">
-        <h1>Explore the Wild Beauty: Plant Observations from Minnesota and Wisconsin</h1>
-        <p>Embark on a virtual exploration of the untamed beauty and botanical diversity found in the heartlands of
-            Minnesota and Wisconsin.</p>
+        <video autoplay loop muted playsinline id="plantPageHeroVideo">
+            <source src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <h1 class="animated-text">Explore Wild Beauty</h1>
+        <p>Plant Observations from Minnesota and Wisconsin.</p>
     </div>
+
+
     <div id="gallery" class="gallery"></div>
     <button id="loadMore">Load More</button>
-
+    <footer class="footer-container">
+        <div class="footer">
+            <span class="copyright" id="copyright">
+                <!-- Copyright text will be inserted here -->
+            </span>
+        </div>
+    </footer>
     <script src="/script.js"></script>
 
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             fetchObservations();
         });
-        
+
         let page = 1; // Initialize page counter to keep track of pagination
-        
+
         function toTitleCase(str) {
             return str.toLowerCase()
                 .split(' ')
@@ -249,7 +285,7 @@
                     .join('-'))
                 .join(' ');
         }
-        
+
         function fetchObservations() {
             const perPage = 20; // Define how many observations to fetch per page
             const apiUrl = `https://api.inaturalist.org/v1/observations?quality_grade=research&identifications=any&captive=false&iconic_taxa[]=Plantae&place_id=124854&verifiable=true&popular=true&spam=false&page=${page}&per_page=${perPage}`;
@@ -263,7 +299,7 @@
                     console.error('Error fetching data: ', error);
                 });
         }
-        
+
         function populateGallery(observations) {
             const gallery = document.getElementById('gallery');
             observations.forEach(observation => {
@@ -271,53 +307,53 @@
                     const observationElement = document.createElement('div');
                     observationElement.className = 'observation';
                     observationElement.style.opacity = '0'; // Set initial opacity for animation
-        
+
                     const linkElement = document.createElement('a');
                     linkElement.href = `https://www.inaturalist.org/observations/${observation.id}`;
                     linkElement.target = "_blank";
-        
+
                     const imageElement = document.createElement('img');
                     imageElement.src = observation.photos[0].url.replace('square', 'medium');
                     imageElement.alt = observation.species_guess ? toTitleCase(observation.species_guess) : 'Observation image';
                     linkElement.appendChild(imageElement);
                     observationElement.appendChild(linkElement);
-        
+
                     // Common Name
                     const commonNameElement = document.createElement('h3');
                     commonNameElement.textContent = observation.species_guess ? toTitleCase(observation.species_guess) : 'Unknown';
                     observationElement.appendChild(commonNameElement);
-        
+
                     // Scientific Name
                     const scientificNameElement = document.createElement('p');
                     scientificNameElement.textContent = observation.taxon ? observation.taxon.name : 'Species';
                     scientificNameElement.classList.add('scientific-name'); // Apply class for styling
                     observationElement.appendChild(scientificNameElement);
-        
+
                     // Date Observed
                     const dateObservedElement = document.createElement('p');
                     const observedDate = observation.observed_on_details.date ? new Date(observation.observed_on_details.date).toLocaleDateString() : 'Unknown Date';
                     dateObservedElement.textContent = `Date Observed: ${observedDate}`;
                     dateObservedElement.classList.add('details'); // Apply class for styling
                     observationElement.appendChild(dateObservedElement);
-        
+
                     // Location
                     const placeElement = document.createElement('p');
                     placeElement.textContent = `Location: ${observation.place_guess || 'Unknown Location'}`;
                     placeElement.classList.add('details'); // Apply class for styling
                     observationElement.appendChild(placeElement);
-        
+
                     gallery.appendChild(observationElement);
                     setTimeout(() => observationElement.style.opacity = '1', 100); // Smoothly transition opacity
                 }
             });
         }
-        
+
         // Load More button functionality
-        document.getElementById('loadMore').addEventListener('click', function() {
+        document.getElementById('loadMore').addEventListener('click', function () {
             fetchObservations();
         });
-        </script>
-        
+    </script>
+
 
 
 </body>
