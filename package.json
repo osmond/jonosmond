@@ -1,0 +1,12 @@
+{
+  "name": "jonosmond",
+  "version": "1.0.0",
+  "description": "Hello! I'm Jon Osmond, a self-taught web developer and digital enthusiast. This repository contains the source code for my personal website, a space where I share my journey and projects in web development and product design.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

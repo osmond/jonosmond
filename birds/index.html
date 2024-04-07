@@ -5,7 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bird of the Day</title>
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;><text y=&#39;0.9em&#39; font-size=&#39;90&#39;>😎</text></svg>">
     <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
     <style>
         body {
             display: flex;
@@ -20,27 +26,104 @@
             /* Full viewport height */
             margin: 0;
             /* Removes default margin */
-            background-color: black;
+            background-color: #222;
+        }
+
+        #preloader {
+            position: absolute;
+            /* Changed from fixed to absolute */
+            top: 0;
+            left: 0;
+            right: 0;
+            /* Ensure it covers the whole #birdOfTheDay div */
+            bottom: 0;
+            background-color: #fff;
+            z-index: 10;
+            /* Adjusted z-index */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            /* Light grey */
+            border-top: 5px solid #3498db;
+            /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .hero {
             /* Add any specific styling you need for .hero here */
             /* If your hero content is pushing to the top, you might want to adjust or remove this */
             margin-top: 20px;
+            color: #fff;
+        }
+
+        .bird-container {
+            position: relative;
+            /* Makes it the reference point for absolute positioning */
+            width: 100%;
+            /* Adjust based on the size of the birdOfTheDay div */
+            max-width: 640px;
+            /* Same as the max-width for birdOfTheDay */
+            margin-left: auto;
+            margin-right: auto;
         }
 
         #birdOfTheDay {
+            position: relative;
+            /* This makes child elements with absolute positioning relative to this div */
             background-color: #fff;
             border-radius: 8px;
-            padding: 20px;
+            padding: 20px 20px 40px 20px;
             margin-top: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h3 {
+
+            color: #3498db;
+            /* Choose a color that signifies science or nature */
+            margin-bottom: 5px;
+
+        }
+
+        h4 {
+            font-style: italic;
+            color: #708090;
+            font-weight: normal;
+            margin-top: 0;
+
         }
 
         img {
             max-width: 100%;
             height: auto;
             border-radius: 8px;
+            display: block;
+            /* Ensures the image is block level to respect max-width */
+            margin-left: auto;
+            /* Centers the image */
+            margin-right: auto;
+            /* Centers the image */
             margin-top: 20px;
         }
 
@@ -50,13 +133,67 @@
             margin-top: 20px;
         }
 
+        #loadAnotherBird {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            /* A nice blue */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            z-index: 999;
+            /* Ensure this is higher than other elements */
+        }
+
+
+        #loadAnotherBird:hover {
+            background-color: #2980b9;
+            /* A slightly darker blue */
+            transform: scale(1.05);
+            /* Slightly enlarge on hover */
+        }
+
         .footer-container {
             width: 100%;
+        }
+
+        .observation-datetime {
+            display: none;
+        }
+
+        .observation-location {
+            display: none;
+        }
+
+        .observation-coords {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 5px;
+            border-radius: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+            display: inline-block;
+            padding-left: 30px;
+            /* Adjust based on the size of the background image */
+            position: relative;
+            background-image: url('data:image/svg+xml,%3Csvg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="%23007bff" width="24px" height="24px"%3E%3Cg id="SVGRepo_bgCarrier" stroke-width="0"%3E%3C/g%3E%3Cg id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"%3E%3C/g%3E%3Cg id="SVGRepo_iconCarrier"%3E%3Cg%3E%3Cpath d="m32,2c-11.046,0 -20,8.954 -20,20 0,15 20,40 20,40s20-25 20-40c0-11.046 -8.954-20 -20-20zm0,30c-5.523,0 -10-4.477 -10-10s4.477-10 10-10 10,4.477 10,10-4.477,10-10,10z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+            background-repeat: no-repeat;
+            background-size: 20px 20px;
+            /* Adjust the size of your icon */
+            background-position: left center;
         }
     </style>
 </head>
 
 <body>
+
+
     <header>
         <!-- SVG Menu Toggle with ARIA Label for Accessibility -->
         <svg viewBox="0 0 800 600" id="menuToggle" aria-label="Menu toggle">
@@ -84,9 +221,18 @@
         <p>Notable bird sightings in Minnesota and Wisconsin</p>
     </div>
 
-    <div id="birdOfTheDay">
-        <!-- Bird details and image will be inserted here -->
+    <div class="bird-container">
+        <div id="birdOfTheDay">
+            <div id="preloader">
+                <div class="loader"></div>
+            </div>
+            <!-- Bird details and image will be inserted here -->
+            <div id="map" style="height: 200px;"></div>
+
+        </div>
+        <button id="loadAnotherBird" style="position: absolute; top: 10px; right: 10px;">Load Another Bird</button>
     </div>
+
 
     <footer class="footer-container">
         <div class="footer">
@@ -108,13 +254,13 @@
                 item.style.animation = nav.classList.contains("show") ? `slideIn 0.5s ease forwards ${index * 0.1}s` : "";
             });
         });
-
+    
         // Set copyright text dynamically
         const year = new Date().getFullYear();
         const month = new Date().toLocaleString("default", { month: "long" });
         const day = new Date().getDate();
         document.getElementById("copyright").innerText = `© ${day} ${month} ${year}`;
-
+    
         // Initialize animations
         function initAnimations() {
             const animatedText = document.querySelector(".animated-text");
@@ -123,14 +269,22 @@
             });
         }
         initAnimations();
-
+    
+        // Function to hide preloader
+        function hidePreloader() {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.style.display = 'none';
+            }
+        }
+    
         // Fetch Bird of the Day from eBird API
-        var myHeaders = new Headers();
-        myHeaders.append("X-eBirdApiToken", "rf0vdjnper7m"); // Replace with your actual eBird API key
-
         async function fetchBirdOfTheDay() {
             try {
-                const response = await fetch("https://api.ebird.org/v2/data/obs/US-MN/recent/notable", {
+                var myHeaders = new Headers();
+                myHeaders.append("X-eBirdApiToken", "rf0vdjnper7m"); // Replace with your actual eBird API key
+    
+                const response = await fetch("https://api.ebird.org/v2/data/obs/US-MN/recent", {
                     method: 'GET',
                     headers: myHeaders,
                     redirect: 'follow'
@@ -139,24 +293,17 @@
                 if (data.length > 0) {
                     const birdOfTheDay = data[Math.floor(Math.random() * data.length)];
                     displayBird(birdOfTheDay);
-                    fetchBirdImageFromCommons(birdOfTheDay.comName, birdOfTheDay.speciesCode, () => {
-                        // Callback function to append location and date after the image
-                        const container = document.getElementById('birdOfTheDay');
-                        const locationPara = document.createElement('p');
-                        locationPara.textContent = `Location: ${birdOfTheDay.locName}`;
-                        const datePara = document.createElement('p');
-                        datePara.textContent = `Date: ${birdOfTheDay.obsDt}`;
-                        container.appendChild(locationPara);
-                        container.appendChild(datePara);
-                    });
+                } else {
+                    hidePreloader();
                 }
             } catch (error) {
                 console.log('Error fetching Bird of the Day:', error);
+                hidePreloader();
             }
         }
-
-        // Fetch bird image from Wikimedia Commons
-        async function fetchBirdImageFromCommons(birdName, speciesCode, callback) {
+    
+        // Fetch bird image from Wikimedia Commons and display observation location
+        async function fetchBirdImageFromCommons(birdName, speciesCode, bird) {
             const searchUrl = `https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(birdName)}&srnamespace=6&format=json&origin=*`;
             try {
                 const response = await fetch(searchUrl);
@@ -167,35 +314,92 @@
                     const imgElement = document.createElement('img');
                     imgElement.src = imageUrl;
                     imgElement.alt = 'Bird image';
-                    // Create a link to the eBird species page using the species code
-                    const link = document.createElement('a');
-                    link.href = `https://ebird.org/species/${speciesCode}`;
-                    link.target = '_blank'; // Open link in new tab
-                    link.appendChild(imgElement);
-                    document.getElementById('birdOfTheDay').appendChild(link);
-                    if (typeof callback === "function") callback(); // Execute the callback after the image is appended
+    
+                    // Create an anchor element
+                    const aElement = document.createElement('a');
+                    aElement.href = `https://ebird.org/species/${speciesCode}`;
+                    aElement.target = '_blank';
+    
+                    aElement.appendChild(imgElement);
+                    document.getElementById('birdOfTheDay').appendChild(aElement);
                 } else {
-                    const container = document.getElementById('birdOfTheDay');
                     const placeholderMsg = document.createElement('p');
                     placeholderMsg.classList.add('placeholder');
                     placeholderMsg.textContent = 'Image not available';
-                    container.appendChild(placeholderMsg);
+                    document.getElementById('birdOfTheDay').appendChild(placeholderMsg);
                 }
             } catch (error) {
                 console.error('Error fetching image:', error);
             }
         }
-
-        // Display bird details
+    
+        // Enhanced displayBird function to include various observation details
         function displayBird(bird) {
             const container = document.getElementById('birdOfTheDay');
-            container.innerHTML = `<h3>${bird.comName}</h3><h4>${bird.sciName}</h4>`;
-            // Image and additional info will be appended via fetchBirdImageFromCommons
+            container.innerHTML = '';
+    
+            const birdNameElement = document.createElement('h3');
+            birdNameElement.textContent = bird.comName;
+            container.appendChild(birdNameElement);
+    
+            const birdSciNameElement = document.createElement('h4');
+            birdSciNameElement.textContent = bird.sciName;
+            container.appendChild(birdSciNameElement);
+    
+            const locationElement = document.createElement('p');
+            locationElement.textContent = `Observed at: ${bird.locName}`;
+            locationElement.classList.add('observation-location');
+            container.appendChild(locationElement);
+    
+            const obsDateTimeElement = document.createElement('p');
+            obsDateTimeElement.textContent = `Date & Time: ${bird.obsDt}`;
+            obsDateTimeElement.classList.add('observation-datetime');
+            container.appendChild(obsDateTimeElement);
+    
+            const coordsElement = document.createElement('p');
+            coordsElement.textContent = `Coordinates: Lat ${bird.lat}, Lng ${bird.lng}`;
+            coordsElement.classList.add('observation-coords');
+            container.appendChild(coordsElement);
+    
+            // Update map with bird's location
+            updateMap(bird.lat, bird.lng); // This line updates the map based on the bird's coordinates.
+    
+            fetchBirdImageFromCommons(bird.comName, bird.speciesCode, bird);
         }
-
-        fetchBirdOfTheDay();
+    
+        // Initialize Leaflet map
+        var map = L.map('map').setView([45.0655, -93.2019], 13); // Default to New Brighton, Minnesota
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    
+        var birdMarker = L.marker([45.0655, -93.2019]).addTo(map); // Initialize marker at New Brighton
+    
+        // Update the map and marker position
+        function updateMap(lat, lng) {
+            map.setView([lat, lng], 13);
+            birdMarker.setLatLng([lat, lng]);
+        }
+    
+        document.getElementById("loadAnotherBird").addEventListener("click", function () {
+            const birdContainer = document.getElementById('birdOfTheDay');
+            birdContainer.innerHTML = '<div id="preloader"><div class="loader"></div></div>';
+            fetchBirdOfTheDay();
+    
+            this.style.backgroundColor = '#2ecc71';
+            this.innerText = 'Loading...';
+            this.disabled = true;
+    
+            setTimeout(() => {
+                this.style.backgroundColor = '#3498db';
+                this.innerText = 'Load Another Bird';
+                this.disabled = false;
+            }, 2000);
+        });
+    
+        fetchBirdOfTheDay(); // Initial call to fetch the Bird of the Day
     </script>
-
+    
 </body>
 
 </html>
