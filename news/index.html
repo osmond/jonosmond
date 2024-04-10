@@ -2,103 +2,144 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New York Times Top Stories</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@100..1000;wdth@25..151;opsz@8..144&display=swap" rel="stylesheet">
+    <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;><text y=&#39;0.9em&#39; font-size=&#39;90&#39;>😎</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <style>
-      body { font-family: 'Roboto Flex', sans-serif; overflow-anchor: none; }
-      .story { display: block; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #ccc; }
-      .story-title { font-weight: bold; margin: 10px 0; color: #333; }
-      .story-abstract { color: #666; }
-      .story-image img { max-width: 100%; height: auto; }
-      .loading { text-align: center; }
+        body {
+            font-family: 'Roboto Serif', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        #stories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .story {
+            position: relative;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .story img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .story-title, .story-abstract {
+            z-index: 2;
+        }
+
+        .story-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .story-abstract {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .story a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .story a:hover {
+            text-decoration: underline;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
-    
     <div id="stories"></div>
-    <div class="loading">Loading more stories...</div>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          const apiKey = 'zlGqAV49zcWJtqpvlgomajXHXDLov2PO';
-          const section = 'home';
-          const url = `https://api.nytimes.com/svc/topstories/v2/${section}.json?api-key=${apiKey}`;
-          
-          // Variables to hold all stories and track which are currently displayed
-          let allStories = [];
-          let loadedStories = 0;
-          const storiesPerLoad = 5; // Number of stories to show each time
-          
-          fetch(url)
-              .then(response => response.json())
-              .then(data => {
-                  allStories = data.results; // Store all stories
-                  loadMoreStories(); // Load the first set of stories
-              })
-              .catch(error => {
-                  console.error('Error fetching data:', error);
-              });
-      
-          function loadMoreStories() {
-              // Calculate the next chunk of stories to load
-              const nextStories = allStories.slice(loadedStories, loadedStories + storiesPerLoad);
-              displayStories(nextStories);
-              loadedStories += storiesPerLoad; // Update the count of loaded stories
-              
-              // Hide loading indicator if all stories are loaded
-              if (loadedStories >= allStories.length) {
-                  document.querySelector('.loading').style.display = 'none';
-              }
-          }
-      
-          function displayStories(stories) {
-              const storiesContainer = document.getElementById('stories');
-              
-              stories.forEach(story => {
-                  const div = document.createElement('div');
-                  div.classList.add('story');
-                  
-                  const title = document.createElement('h2');
-                  title.classList.add('story-title');
-                  title.textContent = story.title;
-                  
-                  const abstract = document.createElement('p');
-                  abstract.classList.add('story-abstract');
-                  abstract.textContent = story.abstract;
-                  
-                  div.appendChild(title);
-                  div.appendChild(abstract);
-                  
-                  if (story.multimedia && story.multimedia.length > 0) {
-                      const img = document.createElement('img');
-                      img.src = story.multimedia[0].url;
-                      img.alt = story.multimedia[0].caption || 'NYT Story Image';
-                      div.insertBefore(img, div.firstChild);
-                  }
-                  
-                  if (story.url) {
-                      const link = document.createElement('a');
-                      link.href = story.url;
-                      link.textContent = 'Read more';
-                      link.target = '_blank';
-                      div.appendChild(link);
-                  }
-                  
-                  storiesContainer.appendChild(div);
-              });
-          }
-      
-          // Listen for scroll events to load more stories
-          window.addEventListener('scroll', () => {
-              // Check if the user has scrolled to the bottom of the page
-              if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-                  loadMoreStories(); // Load more stories
-              }
-          });
-      });
-      </script>
-      
-      
-  
+    document.addEventListener('DOMContentLoaded', function() {
+        const apiKey = 'zlGqAV49zcWJtqpvlgomajXHXDLov2PO';
+        const section = 'home';
+        const url = `https://api.nytimes.com/svc/topstories/v2/${section}.json?api-key=${apiKey}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const storiesContainer = document.getElementById('stories');
+                data.results.forEach(story => {
+                    const storyDiv = document.createElement('div');
+                    storyDiv.classList.add('story');
+
+                    const titleText = story.title.replace(/Trump/g, '🤡');
+                    const abstractText = story.abstract.replace(/Trump/g, '🤡');
+
+                    const title = document.createElement('h2');
+                    title.classList.add('story-title');
+                    title.textContent = titleText;
+
+                    const abstract = document.createElement('p');
+                    abstract.classList.add('story-abstract');
+                    abstract.textContent = abstractText;
+
+                    storyDiv.appendChild(title);
+                    storyDiv.appendChild(abstract);
+
+                    if (story.multimedia && story.multimedia.length > 0) {
+                        const img = document.createElement('img');
+                        img.src = story.multimedia[0].url;
+                        img.alt = story.multimedia[0].caption || 'NYT Story Image';
+                        storyDiv.insertBefore(img, storyDiv.firstChild);
+                    }
+
+                    if (story.url) {
+                        const link = document.createElement('a');
+                        link.href = story.url;
+                        link.textContent = 'Read more';
+                        link.target = '_blank';
+                        storyDiv.appendChild(link);
+                    }
+
+                    // Check if the title or abstract contains 'Trump'
+                    if (titleText.includes('🤡') || abstractText.includes('🤡')) {
+                        const overlay = document.createElement('div');
+                        overlay.classList.add('overlay');
+                        overlay.textContent = 'Click to reveal story';
+                        overlay.addEventListener('click', function() {
+                            this.style.display = 'none';
+                        });
+                        storyDiv.appendChild(overlay);
+                    }
+
+                    storiesContainer.appendChild(storyDiv);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    });
+    </script>
 </body>
 </html>

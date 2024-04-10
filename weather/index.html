@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Based Video Background</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Climate+Crisis&display=swap");
+    
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* Prevent scrolling */
+        }
+    
+        .video-background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -100;
+            background-size: cover;
+            overflow: hidden;
+        }
+    
+        .weather-description {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            z-index: 101;
+            font-size: 2em;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+            font-family: 'Climate Crisis', sans-serif;
+            opacity: 0; /* Start fully transparent */
+            animation: fadeIn 2s ease-out forwards; /* Adjusted animation */
+        }
+    
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        /* Full-Screen Nav Menu */
+.fullscreen-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    /* Semi-transparent black */
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s, visibility 0s 0.5s;
+    z-index: 1000;
+}
+
+.fullscreen-nav ul {
+    list-style: none;
+    text-align: center;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.fullscreen-nav ul li {
+    opacity: 0;
+    /* Start items as invisible */
+    transform: translateX(-50px);
+    /* Start items off-screen */
+    animation-fill-mode: forwards;
+    /* Keep the state after animation ends */
+}
+
+/* Initial state of the menu items */
+.fullscreen-nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: clamp(2rem, 5vw + 1rem, 6rem);
+    font-family: "Climate Crisis", sans-serif;
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition for color and transform */
+    display: inline-block; /* Allows transform */
+}
+
+/* Hover effect */
+.fullscreen-nav ul li a:hover {
+    color: #58a6ff; 
+    transform: scale(1.1); /* Slightly enlarge the text */
+}
+
+
+/* Show Menu */
+.fullscreen-nav.show {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s;
+}
+
+.hidden {
+    display: none;
+}
+
+/* SVG and Menu Toggle Styles */
+svg {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    z-index: 1001;
+    animation: fadeIn 3s ease forwards 3s;
+    width: 50px;
+    /* Adjust size as needed */
+    height: 50px;
+    /* Adjust size as needed */
+}
+
+svg path {
+    stroke-width: 16;
+    stroke-linecap: round;
+    stroke: #fff;
+    fill: none;
+    transition: all 0.5s ease-in-out;
+}
+
+/* In menu form */
+.top_bar,
+.bottom_bar {
+    stroke-dasharray: 240px 910px;
+}
+
+.middle_bar {
+    stroke-dasharray: 240px 240px;
+}
+
+/* In cross form */
+.open .top_bar,
+.open .bottom_bar {
+    stroke-dashoffset: -650px;
+}
+
+.open .middle_bar {
+    stroke-dasharray: 0px 220px;
+    stroke-dashoffset: -120px;
+}
+
+/* Existing style for svg#menuToggle */
+svg#menuToggle {
+    width: 10vw;
+    /* Default size */
+    height: 10vw;
+    /* Keep the icon square */
+    stroke: #fff;
+    z-index: 1001;
+    opacity: 0;
+    /* Start invisible */
+    animation: fadeIn 3s ease forwards 3s;
+}
+
+/* Media query for mobile devices */
+@media only screen and (max-width: 768px) {
+
+    /* Adjust size for mobile */
+    svg#menuToggle {
+        width: 20vw;
+        height: 20vw;
+    }
+}
+
+.inactive {
+    color: lightslategray !important;
+    cursor: not-allowed;
+    filter: grayscale(100%);
+}
+
+svg#menuToggle {
+    filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.75));
+}
+
+.fullscreen-nav ul li a {
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
+}
+    </style>
+    
+</head>
+
+<body>
+    <header>
+        <!-- SVG Menu Toggle with ARIA Label for Accessibility -->
+        <svg viewBox="0 0 800 600" id="menuToggle" aria-label="Menu toggle">
+            <path d="M300,220 C300,220 520,220 540,220 C740,220 640,540 520,420 C440,340 300,200 300,200"
+                class="top_bar">
+            </path>
+            <path d="M300,320 L540,320" class="middle_bar"></path>
+            <path d="M300,210 C300,210 520,210 540,210 C740,210 640,530 520,410 C440,330 300,190 300,190"
+                class="bottom_bar" transform="translate(480, 320) scale(1, -1) translate(-480, -318)"></path>
+        </svg>
+    </header>
+
+    <nav id="fullScreenNav" class="fullscreen-nav">
+        <ul>
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/flora/index.html">Plants</a></li>
+            <li><a href="/birds/index.html">Birds</a></li>
+            <li><a href="/nasa/index.html">APOD</a></li>
+            <li><a href="/weather/index.html">Weather</a></li>
+            <li><a href="https://www.linkedin.com/in/josmond/">LinkedIn</a></li>
+        </ul>
+    </nav>
+    <video autoplay muted loop id="weatherVideo" class="video-background">
+        <source src="" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+    <h1 id="weatherDescription" class="weather-description">Loading Weather...</h1>
+    <script>
+        // JavaScript remains the same
+        const apiKey = 'ada25230f3dacbc9d06a2e45628a4146';
+        const lat = '45.0655';
+        const lon = '-93.2019';
+
+        async function fetchWeather() {
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Weather API response not ok.');
+                const data = await response.json();
+                const mainWeather = data.weather[0].main.toLowerCase();
+                const weatherDescription = data.weather[0].description; // Fetch weather description
+                document.getElementById('weatherDescription').innerText = weatherDescription; // Update the text of the h1 element
+                fetchVideo(mainWeather);
+            } catch (error) {
+                console.error('Failed to fetch weather:', error);
+                // Optionally, update the h1 element to show an error message
+                document.getElementById('weatherDescription').innerText = 'Weather loading failed';
+            }
+        }
+
+
+        async function fetchVideo(weatherCondition) {
+            const pexelsApiKey = 'U9V675nRTdoKBdelDX76kUl9uz6OBFsbrPKFOm4k2BTye7uzMMgxjHsd';
+            const headers = new Headers({
+                'Authorization': pexelsApiKey
+            });
+            const response = await fetch(`https://api.pexels.com/videos/search?query=${weatherCondition}&per_page=1`, { headers });
+            const data = await response.json();
+            if (data.videos.length > 0) {
+                const videoUrl = data.videos[0].video_files[0].link;
+                document.getElementById('weatherVideo').src = videoUrl;
+            }
+        }
+
+        fetchWeather();
+   
+   
+
+            // Menu toggle functionality
+    const menuToggle = document.getElementById("menuToggle");
+    const nav = document.getElementById("fullScreenNav");
+    menuToggle.addEventListener("click", function() {
+        this.classList.toggle("open");
+        nav.classList.toggle("show");
+        const menuItems = nav.querySelectorAll("li");
+        menuItems.forEach((item, index) => {
+            item.style.animation = nav.classList.contains("show") ? `slideIn 0.5s ease forwards ${index * 0.1}s` : "";
+        });
+    });
+</script>
+</body>
+
+</html>
